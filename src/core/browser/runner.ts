@@ -145,8 +145,12 @@ export async function runScenario(o: RunOptions): Promise<ScenarioResult> {
       try {
         guard();
         const req = route.request();
-        if (page && req.isNavigationRequest() && req.frame().page() !== page)
-          throw new Error('Popup navigation denied.');
+        if (
+          page &&
+          req.isNavigationRequest() &&
+          (req.frame().page() !== page || req.frame() !== page.mainFrame())
+        )
+          throw new Error('Popup or frame navigation denied.');
         assertUrl(
           req.url(),
           target,
@@ -154,7 +158,7 @@ export async function runScenario(o: RunOptions): Promise<ScenarioResult> {
         );
         await route.continue();
       } catch {
-        denied = true;
+        if (!cancelled && !signal?.aborted) denied = true;
         await route.abort().catch(() => {});
       }
     });

@@ -53,7 +53,7 @@ Press F5 to launch the extension development host. CI additionally checks skill 
 
 ## Current limits
 
-- Chromium only; one trusted filesystem workspace. Exact navigation paths have no query strings; resources stay on the selected target origin. Cross-origin CDNs, popups, downloads, service workers, and WebSockets are blocked.
+- Chromium only; one trusted filesystem workspace. Exact navigation paths have no query strings; resources stay on the selected target origin. Cross-origin CDNs, frame navigations, popups, downloads, service workers, and WebSockets are blocked.
 - Trace evidence is a redacted action log, not a native Playwright trace archive. Raw DOM, request bodies/headers, cookies, and console text are not recorded.
 - Screenshots require approved test data and masks. All inputs are masked; secret-bearing scenarios suppress images altogether. Blackbox does not claim to detect arbitrary personal data in rendered pixels.
 - Baselines live outside Git and share the configured retention quota. Expired or changed-config baselines require new human review.

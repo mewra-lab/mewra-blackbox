@@ -196,7 +196,7 @@ export class BlackboxService {
       );
       this.latest = aggregate(results);
       if (this.abort.signal.aborted) {
-        this.latest.status = 'warning';
+        if (this.latest.status !== 'fail') this.latest.status = 'warning';
         this.latest.message =
           'Suite cancelled; remaining scenarios were not executed.';
       }

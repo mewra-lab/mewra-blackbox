@@ -12,6 +12,8 @@ Unit tests run without Chromium and cover configuration/approval, origin and IP 
 
 The VS Code host smoke test supplements mocked contract tests; it does not assert an always-visible PreFlight row action, which is unavailable in the current host API/UI. See INTEGRATION.md.
 
+CI pins Ubuntu 22.04 so downloaded Chromium can use its Linux sandbox without changing the runner's security policy. Ubuntu 24.04+ may require an administrator-managed AppArmor profile for the downloaded browser's user namespaces; see [Chromium's guidance](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md). Blackbox does not automatically disable that sandbox. Browser fixtures perform a launch probe before any negative tests, so an unavailable sandbox cannot falsely satisfy a policy-denial test.
+
 ## Test layers
 
 | Layer                 | Focus                                                                                                                                            |

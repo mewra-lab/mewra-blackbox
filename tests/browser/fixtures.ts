@@ -21,6 +21,11 @@ export async function fixtures() {
       res.writeHead(302, { location: '/unapproved' }).end();
       return;
     }
+    if (req.url === '/frame') {
+      res.setHeader('content-type', 'text/html');
+      res.end('<h1>Hello</h1><iframe src="/same-redirect"></iframe>');
+      return;
+    }
     if (req.url === '/unapproved') {
       unapprovedRouteHits++;
       res.end('Unexpected');

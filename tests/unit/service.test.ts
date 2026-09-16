@@ -118,3 +118,23 @@ it('serializes runs before the first asynchronous approval read', async () => {
   finish();
   expect((await first).status).toBe('pass');
 });
+it('does not downgrade an assertion failure when the suite is cancelled', async () => {
+  secrets.set(`approval:${digest(root)}`, digest(configuration()));
+  mock.runner.mockImplementation(async () => {
+    app.abort!.abort();
+    return {
+      scenarioId: 'home',
+      label: 'Home',
+      targetLabel: 'App',
+      routeLabel: '/',
+      viewport: 'desktop',
+      width: 800,
+      height: 600,
+      status: 'fail',
+      message: 'Failed assertion',
+      durationMs: 1,
+      evidence: {},
+    };
+  });
+  expect((await app.run(['home'])).status).toBe('fail');
+});

@@ -8,6 +8,7 @@ import { ArtifactStore } from '../../src/core/results/artifacts';
 import { runScenario } from '../../src/core/browser/runner';
 import { saveBaseline } from '../../src/core/visual/compare';
 import type { Config } from '../../src/core/config/schema';
+import { chromium } from 'playwright-core';
 describe.skipIf(process.env.BLACKBOX_BROWSER_TESTS !== '1')(
   'real Chromium controlled fixtures',
   () => {
@@ -15,6 +16,12 @@ describe.skipIf(process.env.BLACKBOX_BROWSER_TESTS !== '1')(
       root: string,
       store: ArtifactStore;
     beforeAll(async () => {
+      // A setup failure must fail the suite, not accidentally satisfy denial tests.
+      const probe = await chromium.launch({
+        headless: true,
+        chromiumSandbox: process.platform === 'linux',
+      });
+      await probe.close();
       fixture = await fixtures();
       root = await mkdtemp(join(tmpdir(), 'blackbox-browser-'));
       await mkdir(join(root, 'workspace'));
@@ -26,8 +33,8 @@ describe.skipIf(process.env.BLACKBOX_BROWSER_TESTS !== '1')(
       await store.init();
     });
     afterAll(async () => {
-      await fixture.close();
-      await rm(root, { recursive: true, force: true });
+      await fixture?.close();
+      if (root) await rm(root, { recursive: true, force: true });
     });
     function run(config: Config, signal?: AbortSignal) {
       return runScenario({
@@ -129,6 +136,19 @@ describe.skipIf(process.env.BLACKBOX_BROWSER_TESTS !== '1')(
       const abort = new AbortController();
       abort.abort();
       expect((await run(c, abort.signal)).status).toBe('warning');
+    });
+    it('denies popup and frame navigation even to the approved origin', async () => {
+      const popup = configuration(fixture.origin);
+      popup.scenarios[0].steps.push({
+        action: 'click',
+        selector: { by: 'role', role: 'button', name: 'Popup' },
+      });
+      expect((await run(popup)).status).toBe('fail');
+      const frame = configuration(fixture.origin);
+      frame.scenarios[0].routes = ['/frame', '/same-redirect'];
+      frame.scenarios[0].steps[0] = { action: 'navigate', route: '/frame' };
+      expect((await run(frame)).status).toBe('fail');
+      expect(fixture.unapprovedRouteHits()).toBe(0);
     });
     it('suppresses secret screenshots and raw console/trace content', async () => {
       const c = configuration(fixture.origin);

@@ -8,7 +8,7 @@ There is no implicit migration: unknown versions and unknown fields are rejected
 
 Each target declares `id`, `label`, `environment`, and a canonical `origin` containing scheme, hostname, and optional port, without a trailing slash. Public targets require HTTPS. `allowLoopback`, `allowPrivateNetwork`, and `allowCustomPort` are separate opt-ins. Link-local/metadata, multicast, unspecified, reserved, and transition addresses remain denied even with opt-ins. Every resolved address must be allowed; the proxy pins the validated IP, preventing DNS rebinding between policy validation and connection.
 
-Only the scenario's target origin can receive requests. Navigation also requires an exact route from `routes`; queries, credentials, traversal, and ambiguous encodings are rejected. Redirects remain subject to policy. All browser contexts are nonpersistent; browser launch options cannot come from configuration.
+Only the scenario's target origin can receive requests. Navigation also requires an exact route from `routes`; queries, credentials, traversal, and ambiguous encodings are rejected. Redirect responses are checked before following Location. Frame navigations and popups are blocked, including same-origin frames, so out-of-process frame redirects cannot bypass the top-page redirect guard. All browser contexts are nonpersistent; browser launch options cannot come from configuration.
 
 ## Actions and selectors
 
