@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "severity": "error",
+  "targets": [
+    {
+      "id": "local-app",
+      "label": "Local development",
+      "environment": "local",
+      "origin": "http://127.0.0.1:3000",
+      "allowLoopback": true,
+      "allowCustomPort": true
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "home",
+      "label": "Home page",
+      "target": "local-app",
+      "routes": ["/"],
+      "viewports": [
+        { "name": "desktop", "width": 1280, "height": 800 },
+        { "name": "mobile", "width": 390, "height": 844, "mobile": true }
+      ],
+      "changedFiles": ["src/**", "app/**"],
+      "steps": [
+        { "action": "navigate", "route": "/" },
+        {
+          "action": "visible",
+          "selector": { "by": "role", "role": "heading", "name": "Welcome" }
+        },
+        { "action": "url", "route": "/" }
+      ],
+      "evidence": {
+        "screenshot": "always",
+        "traceOnFailure": true,
+        "masks": []
+      },
+      "visual": { "maxDiffRatio": 0.01, "pixelThreshold": 0.1 }
+    }
+  ],
+  "retention": { "maxFiles": 100, "maxBytes": 50000000, "maxAgeDays": 7 },
+  "mcp": { "enabled": false, "allowRuns": false, "allowProposals": false }
+}

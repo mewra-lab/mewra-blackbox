@@ -1,0 +1,121 @@
+:root {
+  color-scheme: light dark;
+}
+body {
+  margin: 0 auto;
+  padding: 28px;
+  max-width: 1200px;
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  font-family: var(--vscode-font-family);
+  line-height: 1.6;
+}
+header,
+.card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.eyebrow {
+  font: 11px var(--vscode-editor-font-family);
+  letter-spacing: 0.15em;
+  color: var(--vscode-descriptionForeground);
+}
+h1 {
+  font-size: 25px;
+  margin: 0;
+  font-weight: 600;
+}
+h2 {
+  font-size: 17px;
+  margin: 0;
+}
+article,
+section {
+  border-top: 1px solid var(--vscode-panel-border);
+  padding: 24px 0;
+  margin-top: 20px;
+}
+.context {
+  color: var(--vscode-descriptionForeground);
+  font: 12px var(--vscode-editor-font-family);
+  overflow-wrap: anywhere;
+}
+.status {
+  font: 12px var(--vscode-editor-font-family);
+  border: 1px solid var(--vscode-panel-border);
+  padding: 4px 8px;
+}
+.fail {
+  color: var(--vscode-errorForeground);
+}
+.warning,
+.not-configured {
+  color: var(--vscode-editorWarning-foreground);
+}
+.pass {
+  color: var(--vscode-testing-iconPassed);
+}
+button {
+  font: inherit;
+  padding: 6px 12px;
+  cursor: pointer;
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: 1px solid transparent;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 3px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.evidence {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+figure {
+  margin: 0;
+  min-width: 0;
+}
+figcaption {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+img {
+  width: 100%;
+  border: 1px solid var(--vscode-panel-border);
+}
+p,
+pre {
+  overflow-wrap: anywhere;
+}
+pre {
+  white-space: pre-wrap;
+  font-family: var(--vscode-editor-font-family);
+}
+@media (max-width: 500px) {
+  body {
+    padding: 16px;
+  }
+  header,
+  .card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

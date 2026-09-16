@@ -1,0 +1,474 @@
+{
+  "$ref": "#/definitions/BlackboxConfig",
+  "definitions": {
+    "BlackboxConfig": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning"],
+          "default": "error"
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+              },
+              "environment": {
+                "type": "string",
+                "enum": ["local", "staging", "production"]
+              },
+              "origin": {
+                "type": "string",
+                "maxLength": 256
+              },
+              "allowLoopback": {
+                "type": "boolean",
+                "default": false
+              },
+              "allowPrivateNetwork": {
+                "type": "boolean",
+                "default": false
+              },
+              "allowCustomPort": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "required": ["id", "label", "environment", "origin"],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/id"
+              },
+              "label": {
+                "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/label"
+              },
+              "target": {
+                "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/id"
+              },
+              "routes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "minItems": 1,
+                "maxItems": 30
+              },
+              "viewports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/id"
+                    },
+                    "width": {
+                      "type": "integer",
+                      "minimum": 240,
+                      "maximum": 2560
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 240,
+                      "maximum": 1440
+                    },
+                    "mobile": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  },
+                  "required": ["name", "width", "height"],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "maxItems": 6
+              },
+              "changedFiles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "pattern": "^[a-zA-Z0-9_./*?{}@+-]+$"
+                },
+                "minItems": 1,
+                "maxItems": 30
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "navigate"
+                        },
+                        "route": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/routes/items"
+                        }
+                      },
+                      "required": ["action", "route"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "click"
+                        },
+                        "selector": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "by": {
+                                  "type": "string",
+                                  "const": "role"
+                                },
+                                "role": {
+                                  "type": "string",
+                                  "enum": [
+                                    "button",
+                                    "link",
+                                    "textbox",
+                                    "heading",
+                                    "checkbox",
+                                    "combobox",
+                                    "option",
+                                    "alert",
+                                    "status",
+                                    "img"
+                                  ]
+                                },
+                                "name": {
+                                  "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/label"
+                                }
+                              },
+                              "required": ["by", "role", "name"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "by": {
+                                  "type": "string",
+                                  "const": "label"
+                                },
+                                "value": {
+                                  "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/label"
+                                }
+                              },
+                              "required": ["by", "value"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "by": {
+                                  "type": "string",
+                                  "const": "testId"
+                                },
+                                "value": {
+                                  "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/id"
+                                }
+                              },
+                              "required": ["by", "value"],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      },
+                      "required": ["action", "selector"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "fill"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        },
+                        "value": {
+                          "type": "string",
+                          "maxLength": 1024
+                        }
+                      },
+                      "required": ["action", "selector", "value"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "fillSecret"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        },
+                        "secret": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/targets/items/properties/id"
+                        }
+                      },
+                      "required": ["action", "selector", "secret"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "select"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        },
+                        "value": {
+                          "type": "string",
+                          "maxLength": 256
+                        }
+                      },
+                      "required": ["action", "selector", "value"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "url"
+                        },
+                        "route": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/routes/items"
+                        }
+                      },
+                      "required": ["action", "route"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "visible"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        }
+                      },
+                      "required": ["action", "selector"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "text"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1024
+                        }
+                      },
+                      "required": ["action", "selector", "text"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "action": {
+                          "type": "string",
+                          "const": "count"
+                        },
+                        "selector": {
+                          "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 1000
+                        }
+                      },
+                      "required": ["action", "selector", "count"],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 100
+              },
+              "evidence": {
+                "type": "object",
+                "properties": {
+                  "screenshot": {
+                    "type": "string",
+                    "enum": ["off", "failure", "always"],
+                    "default": "failure"
+                  },
+                  "traceOnFailure": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "masks": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/BlackboxConfig/properties/scenarios/items/properties/steps/items/anyOf/1/properties/selector"
+                    },
+                    "maxItems": 10,
+                    "default": []
+                  }
+                },
+                "additionalProperties": false
+              },
+              "visual": {
+                "type": "object",
+                "properties": {
+                  "maxDiffRatio": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 0.1
+                  },
+                  "pixelThreshold": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 0.5,
+                    "default": 0.1
+                  }
+                },
+                "required": ["maxDiffRatio"],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "target",
+              "routes",
+              "viewports",
+              "changedFiles",
+              "steps",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100
+        },
+        "timeouts": {
+          "type": "object",
+          "properties": {
+            "actionMs": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 30000,
+              "default": 5000
+            },
+            "navigationMs": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 60000,
+              "default": 15000
+            },
+            "screenshotMs": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 15000,
+              "default": 5000
+            },
+            "runMs": {
+              "type": "integer",
+              "minimum": 500,
+              "maximum": 180000,
+              "default": 60000
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "retention": {
+          "type": "object",
+          "properties": {
+            "maxFiles": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 1000,
+              "default": 100
+            },
+            "maxBytes": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 500000000,
+              "default": 50000000
+            },
+            "maxAgeDays": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30,
+              "default": 7
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        },
+        "mcp": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowRuns": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowProposals": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false,
+          "default": {}
+        }
+      },
+      "required": ["version", "targets", "scenarios"],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
