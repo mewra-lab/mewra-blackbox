@@ -20,7 +20,7 @@ await build({
       name: 'bundled-browser-library',
       setup(b) {
         b.onResolve({ filter: /^playwright-core$/ }, () => ({
-          path: './vendor/playwright-core/index.js',
+          path: './vendor/playwright-core/index.mjs',
           external: true,
         }));
       },
@@ -45,3 +45,6 @@ await build({
   outfile: 'dist/viewer.js',
 });
 await cp('src/webview/style.css', 'dist/viewer.css');
+const browserModule = await import('../dist/vendor/playwright-core/index.mjs');
+if (typeof browserModule.chromium?.executablePath !== 'function')
+  throw new Error('Packaged Playwright ESM entry is invalid.');
