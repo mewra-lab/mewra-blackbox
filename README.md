@@ -1,6 +1,6 @@
 # Mewra Blackbox
 
-Mewra Blackbox is an open-source VS Code companion extension for safe, repeatable browser-based black-box testing. It will run approved E2E scenarios against configured web targets, capture screenshots and browser traces, compare visual baselines, and contribute a concise release gate to Mewra PreFlight.
+Mewra Blackbox is an open-source VS Code companion extension for approved, repeatable browser-based testing. It runs declarative Chromium scenarios, captures local screenshot evidence and redacted action traces, compares human-approved visual baselines, and contributes a compact check to Mewra PreFlight API v1.
 
 It is not a vulnerability scanner, autonomous browser bot, production load tester, or a replacement for server-side CI.
 
@@ -22,7 +22,43 @@ It is not a vulnerability scanner, autonomous browser bot, production load teste
 
 ## Status
 
-This repository currently contains the product, security, architecture, UX, testing, integration, release, and contribution documents. No implementation or executable test runner has been created yet.
+The initial implementation covers controlled E2E, local visual baselines, a result viewer, and bounded MCP assistance. It is pre-release software; no Marketplace publication or release approval is implied by a passing check.
+
+## Get started
+
+1. Install the VSIX and open one trusted, local workspace.
+2. Copy `.mewra-blackbox.json.example` to `.mewra-blackbox.json` and edit the target, routes, selectors, and changed-file patterns for your application. Keep literal test values synthetic; use `fillSecret` for credentials.
+3. Run **Blackbox: Review and Approve Configuration**. Review the complete normalized configuration in the editor before confirming. Any semantic change invalidates the approval stored in SecretStorage.
+4. Run **Blackbox: Install Chromium** to download the browser pinned to this extension. Missing tooling returns `not-configured`.
+5. Run **Blackbox: Run Approved Scenario** or explicitly request the full suite. Open **Blackbox: Open Results** for screenshots and redacted failure details.
+6. For visual checks, inspect the actual image and choose **Review baseline…**. Confirm in VS Code; subsequent runs compare against that baseline. Baselines never update automatically.
+
+For named secrets, add a `fillSecret` step referencing a handle, approve the configuration, then use **Blackbox: Set Named Secret**. Secret-bearing scenarios do not capture screenshots or support visual comparisons.
+
+## Development
+
+Use Node 20.19+ or Node 22.12+ and pnpm 10.17.1 (the version in `packageManager`).
+
+```sh
+corepack enable
+pnpm install --frozen-lockfile
+pnpm validate
+pnpm exec playwright-core install chromium
+pnpm test:browser
+pnpm test:extension
+pnpm package
+```
+
+Press F5 to launch the extension development host. CI additionally checks skill integrity, browser security regressions, extension activation, and packaged contents. See [testing](docs/TESTING.md) and [configuration](docs/CONFIGURATION.md).
+
+## Current limits
+
+- Chromium only; one trusted filesystem workspace. Exact navigation paths have no query strings; resources stay on the selected target origin. Cross-origin CDNs, popups, downloads, service workers, and WebSockets are blocked.
+- Trace evidence is a redacted action log, not a native Playwright trace archive. Raw DOM, request bodies/headers, cookies, and console text are not recorded.
+- Screenshots require approved test data and masks. All inputs are masked; secret-bearing scenarios suppress images altogether. Blackbox does not claim to detect arbitrary personal data in rendered pixels.
+- Baselines live outside Git and share the configured retention quota. Expired or changed-config baselines require new human review.
+- PreFlight API v1 receives normalized results. Its current UI only renders the contributed setup command for `not-configured`; other statuses use the Blackbox Command Palette entry to open results. An always-visible row action requires an upstream generic API/UI addition (see [integration](docs/INTEGRATION.md)).
+- MCP is disabled by default. Enable its individual capabilities in approved configuration. Agent proposals remain in a bounded in-memory review queue and do not modify executable configuration.
 
 ## Documentation
 

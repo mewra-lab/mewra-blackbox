@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "skills": {
+    "code-review": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/code-review",
+      "computedHash": "89f1207804e125d1dfed3dbe29aaf81e7e61331f98dddc7aa8b0aa46e5197807"
+    },
+    "codebase-design": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/codebase-design",
+      "computedHash": "4623bc4b4b211bef29025732335f180e14d42756a30e862d852308c9fae13928"
+    },
+    "domain-modeling": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/domain-modeling",
+      "computedHash": "a7064ccb8a571ac7a400e7bc71790d73671f2bb14cf3998e7a2dc6d2748e4cc2"
+    },
+    "frontend-design": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/frontend-design",
+      "computedHash": "89a7a3eedfced10f6ef1dac16bb1fef720cf91018d51fcad68c3dea942e595c5"
+    },
+    "implement-spec": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/implement-spec",
+      "computedHash": "ca204aad42dd3ce9106e0877b2f76c305fb304dadb046c8ea17947e115099d57"
+    },
+    "setup-pre-commit": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/setup-pre-commit",
+      "computedHash": "b7455a91310ae0aa9b02b2642533fe60f17a1443d45bc0b455cc3136f2d85c8b"
+    },
+    "tdd": {
+      "source": "mewra-lab/mewra-preflight",
+      "sourceType": "github",
+      "revision": "6ee6c0821c7c0526f6cd4d032feb0802389caaae",
+      "skillPath": ".agents/skills/tdd",
+      "computedHash": "1354708113d51ebf53e5d28766a0e6bc89efb8b7bd0a5d576af4b0807fbb2cd3"
+    }
+  }
+}

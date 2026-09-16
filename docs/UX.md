@@ -1,5 +1,13 @@
 # UX
 
+## Implemented command flow
+
+The Command Palette exposes configuration review, scenario selection, full suite, cancellation, secrets, Chromium setup, results, baseline review, and proposal review. Configuration review opens normalized JSON and requires a native modal confirmation. The viewer uses VS Code theme colors/fonts, explicit status text, responsive side-by-side baseline/actual/diff figures, keyboard-focusable images and buttons, and collapsible redacted action traces. Evidence expiry is shown inline. Empty results explain approval/setup; a progress notification reports the current action and supports cancellation.
+
+Agent proposals are shown as non-executable documents for manual review/copying. They cannot become executable directly from the viewer. Secret-bearing scenarios explain why screenshots are suppressed. Baseline approval opens the viewer and requires a second native confirmation, and does not mark the last failed result as passing.
+
+The current PreFlight row action limitation is recorded in INTEGRATION.md.
+
 ## Primary surfaces
 
 ### 1. Scenario runner
@@ -29,13 +37,13 @@ PreFlight shows only the aggregate state, scenario count, concise failure count,
 
 ## States
 
-| State | Meaning | User action |
-| --- | --- | --- |
-| `pass` | Every selected scenario passed. | Open evidence if desired. |
-| `warning` | Non-blocking configured condition, unavailable optional evidence, or bounded execution issue. | Review the scenario result. |
-| `fail` | An assertion, visual threshold, policy, or required scenario failed. | Open result details and fix or obtain human baseline approval. |
-| `not-configured` | Required browser tooling or approved configuration is unavailable. | Install/setup through documented user-visible flow. |
-| `skipped` | No scenario maps to the current diff. | Run an explicit full suite if needed. |
+| State            | Meaning                                                                                       | User action                                                    |
+| ---------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `pass`           | Every selected scenario passed.                                                               | Open evidence if desired.                                      |
+| `warning`        | Non-blocking configured condition, unavailable optional evidence, or bounded execution issue. | Review the scenario result.                                    |
+| `fail`           | An assertion, visual threshold, policy, or required scenario failed.                          | Open result details and fix or obtain human baseline approval. |
+| `not-configured` | Required browser tooling or approved configuration is unavailable.                            | Install/setup through documented user-visible flow.            |
+| `skipped`        | No scenario maps to the current diff.                                                         | Run an explicit full suite if needed.                          |
 
 ## Accessibility
 

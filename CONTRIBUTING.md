@@ -1,6 +1,8 @@
 # Contributing to Mewra Blackbox
 
-Thank you for contributing. The project is documentation-first until the initial implementation plan is approved.
+Use Node 20.19+ or 22.12+, pnpm 10.17.1, and a focused branch. Run `pnpm install --frozen-lockfile`, `pnpm validate`, browser tests, extension-host tests, and `pnpm package` before requesting review. Browser fixtures must contain synthetic data only.
+
+Repository-local contributor skills under `.agents/skills/` are vendored from the pinned PreFlight revision in `skills-lock.json`. They become discoverable on the next agent turn. Run `pnpm skills:verify` after changes; preserve upstream attribution and licenses. Updating skills is a deliberate dependency update, not an unpinned install during CI.
 
 ## Before proposing a change
 

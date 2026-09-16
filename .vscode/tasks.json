@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "process",
+      "command": "pnpm",
+      "args": ["build"],
+      "problemMatcher": []
+    },
+    {
+      "label": "validate",
+      "type": "process",
+      "command": "pnpm",
+      "args": ["validate"],
+      "problemMatcher": []
+    }
+  ]
+}

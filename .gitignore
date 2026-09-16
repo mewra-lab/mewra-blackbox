@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.vsix
+coverage/
+.vscode-test/
+.env*
+*.png
+*.zip
+*.trace
+playwright-report/
+test-results/
+.mewra-blackbox.json
+profiles/
+artifacts/
+.DS_Store

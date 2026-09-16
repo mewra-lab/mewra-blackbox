@@ -1,0 +1,33 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '20'
+          cache: pnpm
+      - run: node scripts/verify-release.mjs
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm skills:verify
+      - run: pnpm validate
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm test:browser
+      - run: xvfb-run -a pnpm test:extension
+      - run: pnpm package
+      - run: sha256sum mewra-blackbox.vsix > SHA256SUMS
+      - run: gh release create "$GITHUB_REF_NAME" mewra-blackbox.vsix SHA256SUMS --verify-tag --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

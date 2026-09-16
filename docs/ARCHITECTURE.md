@@ -21,18 +21,18 @@ Browser runner
       └─────────► contributed CheckRunner ──► Mewra PreFlight summary
 ```
 
-## Future modules
+## Modules
 
-| Layer | Responsibility |
-| --- | --- |
-| `src/extension/` | VS Code commands, SecretStorage, result viewer lifecycle, PreFlight activation and registration. |
-| `src/core/config/` | Strict schema validation, target policy, scenario selection, and configuration migration. |
-| `src/core/browser/` | Fixed Playwright launch settings, isolated contexts, navigation and action bounds, network controls. |
-| `src/core/scenarios/` | Declarative action interpreter and assertion normalization. |
-| `src/core/visual/` | Baseline lookup, masking, image comparison, threshold evaluation, and redaction policy. |
-| `src/core/results/` | Stable normalized result and artifact metadata. No raw secrets or unrestricted DOM dumps. |
-| `src/shared/` | Types and validated messages shared by extension and webview. |
-| `src/webview/` | Result viewer only; it never runs browser commands directly. |
+| Layer                 | Responsibility                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------------------------- |
+| `src/extension/`      | VS Code commands, SecretStorage, result viewer lifecycle, PreFlight activation and registration.     |
+| `src/core/config/`    | Strict schema validation, target policy, scenario selection, and configuration migration.            |
+| `src/core/browser/`   | Fixed Playwright launch settings, isolated contexts, navigation and action bounds, network controls. |
+| `src/core/scenarios/` | Declarative action interpreter and assertion normalization.                                          |
+| `src/core/visual/`    | Baseline lookup, masking, image comparison, threshold evaluation, and redaction policy.              |
+| `src/core/results/`   | Stable normalized result and artifact metadata. No raw secrets or unrestricted DOM dumps.            |
+| `src/shared/`         | Types and validated messages shared by extension and webview.                                        |
+| `src/webview/`        | Result viewer only; it never runs browser commands directly.                                         |
 
 ## Result model
 
@@ -44,6 +44,8 @@ findings: scenario ID, route label, redacted assertion message, local evidence r
 ```
 
 The rich result viewer resolves local evidence only after validating that its path is within the Blackbox managed artifact directory. It presents a baseline, actual screenshot, pixel diff, trace reference, and redacted event summary.
+
+The extension service owns SecretStorage approval, a single-run lock, cancellation, and the bounded in-memory proposal queue. The runner does not import VS Code. DNS-pinned forwarding lives in `src/core/browser/proxy.ts`; visual metadata and PNG comparison live in `src/core/visual/compare.ts`. MCP validation and HTTP transport are in `src/core/mcp/`, with the native VS Code provider registered only in the extension layer. Playwright is shipped from the extension's pinned vendor directory; no workspace executable or package is loaded.
 
 ## Scenario selection
 
