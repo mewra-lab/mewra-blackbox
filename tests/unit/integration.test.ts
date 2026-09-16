@@ -6,6 +6,20 @@ import {
   registerWithHost,
 } from '../../src/core/integration/preflight';
 import { viewerMessage } from '../../src/shared/messages';
+it('contributes a fixed result command and negotiates host result actions', async () => {
+  const check = createCheck(() => configuration(), vi.fn());
+  expect(check.resultCommand).toBe('mewra-blackbox.results');
+  const host = {
+    activate: async () => ({
+      apiVersion: 1,
+      capabilities: { resultActions: true },
+      registerCheck: vi.fn(() => ({ dispose() {} })),
+    }),
+  };
+  expect((await registerWithHost(host, check)).message).toContain(
+    'with result actions',
+  );
+});
 it('handles missing and incompatible PreFlight hosts', async () => {
   const check = createCheck(() => undefined, vi.fn());
   expect(

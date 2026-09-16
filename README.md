@@ -57,7 +57,7 @@ Press F5 to launch the extension development host. CI additionally checks skill 
 - Trace evidence is a redacted action log, not a native Playwright trace archive. Raw DOM, request bodies/headers, cookies, and console text are not recorded.
 - Screenshots require approved test data and masks. All inputs are masked; secret-bearing scenarios suppress images altogether. Blackbox does not claim to detect arbitrary personal data in rendered pixels.
 - Baselines live outside Git and share the configured retention quota. Expired or changed-config baselines require new human review.
-- PreFlight API v1 receives normalized results. Its current UI only renders the contributed setup command for `not-configured`; other statuses use the Blackbox Command Palette entry to open results. An always-visible row action requires an upstream generic API/UI addition (see [integration](docs/INTEGRATION.md)).
+- PreFlight API v1 receives normalized results. Hosts advertising `capabilities.resultActions` show **Open results** on completed check rows; older hosts use the Blackbox Command Palette entry. Install the companion PreFlight result-action update for the row button (see [integration](docs/INTEGRATION.md)).
 - MCP is disabled by default. Enable its individual capabilities in approved configuration. Agent proposals remain in a bounded in-memory review queue and do not modify executable configuration.
 
 ## Documentation

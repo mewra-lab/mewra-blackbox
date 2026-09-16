@@ -10,7 +10,7 @@
 
 Unit tests run without Chromium and cover configuration/approval, origin and IP policy, artifact paths and retention, redaction, deterministic image comparison, PreFlight API negotiation, message validation, MCP argument/capability denial, and authenticated transport. Browser tests use synthetic pages served on explicitly permitted loopback ports. No test credentials or customer screenshots are needed. Fixtures fix document data, use local system fonts, avoid external dependencies, and use no changing clock content. Browser test runs clean their temporary directories and server sockets.
 
-The VS Code host smoke test supplements mocked contract tests; it does not assert an always-visible PreFlight row action, which is unavailable in the current host API/UI. See INTEGRATION.md.
+The VS Code host smoke test supplements mocked contract tests. Result-action contract tests cover the fixed viewer command and host capability negotiation; PreFlight's companion PR tests strict ID-only messages, registry revocation/enablement, and completed result states. See INTEGRATION.md.
 
 CI pins Ubuntu 22.04 so downloaded Chromium can use its Linux sandbox without changing the runner's security policy. Ubuntu 24.04+ may require an administrator-managed AppArmor profile for the downloaded browser's user namespaces; see [Chromium's guidance](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md). Blackbox does not automatically disable that sandbox. Browser fixtures perform a launch probe before any negative tests, so an unavailable sandbox cannot falsely satisfy a policy-denial test.
 

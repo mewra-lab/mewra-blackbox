@@ -6,7 +6,7 @@ The Command Palette exposes configuration review, scenario selection, full suite
 
 Agent proposals are shown as non-executable documents for manual review/copying. They cannot become executable directly from the viewer. Secret-bearing scenarios explain why screenshots are suppressed. Baseline approval opens the viewer and requires a second native confirmation, and does not mark the last failed result as passing.
 
-The current PreFlight row action limitation is recorded in INTEGRATION.md.
+The PreFlight result-action contract and older-host Command Palette fallback are recorded in INTEGRATION.md.
 
 ## Primary surfaces
 

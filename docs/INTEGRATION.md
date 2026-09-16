@@ -33,11 +33,13 @@ The full suite is an explicit user action in Blackbox and must not be triggered 
 
 Blackbox maps each scenario result to PreFlight findings without embedding raw screenshots or traces. A finding includes the scenario ID, human label, affected route, safe message, and local evidence reference. The fixed registered viewer command is `mewra-blackbox.results`.
 
-## Verified host contract and remaining UI dependency
+## Host contract and result actions
 
-The implementation is based on `mewra-lab/mewra-preflight` revision `6ee6c0821c7c0526f6cd4d032feb0802389caaae`: `apiVersion: 1`, `registerCheck(CheckRunner)`, and the published `CheckResult` fields. The companion registers `setupCommand: mewra-blackbox.results` and emits the same fixed command in finding metadata. It never treats metadata supplied by a target or agent as a command.
+The base contract is `mewra-lab/mewra-preflight` revision `6ee6c0821c7c0526f6cd4d032feb0802389caaae`: `apiVersion: 1`, `registerCheck(CheckRunner)`, and the published `CheckResult` fields. The companion registers both `setupCommand` and the additive `resultCommand` as the fixed command `mewra-blackbox.results`. It never treats target, agent, or finding metadata as executable commands.
 
-At this revision, PreFlight renders `setupCommand` only when the result is `not-configured`; it does not render commands from finding metadata. Therefore the always-visible **Open Blackbox results** row action requested in issue #6 remains an upstream dependency. For pass/warning/fail results, use **Blackbox: Open Results** in the Command Palette. A future generic `resultCommand`/action contract in PreFlight can enable the row action without coupling the host to browser automation. This repository does not silently patch or fork PreFlight.
+The companion [PreFlight PR #13](https://github.com/mewra-lab/mewra-preflight/pull/13) adds generic result actions and advertises `capabilities.resultActions: true`. With that host, completed check rows show **Open results** across pass/warning/fail/not-configured/skipped states (expand the skipped section for skipped checks). The webview sends only the check ID; the host checks current enablement/registration against its snapshot and executes the fixed command without arguments. Browser automation and rich evidence remain wholly inside Blackbox.
+
+Older API v1 hosts still register/run Blackbox checks, but only show their setup action for `not-configured`. The extension output explicitly identifies this compatibility fallback: use **Blackbox: Open Results** in the Command Palette. The companion host PR must be merged and installed to obtain the row button requested in #6.
 
 ## Versioning
 

@@ -20,6 +20,7 @@ export type CheckRunner = {
   severity: 'error' | 'warning';
   installable: boolean;
   setupCommand: string;
+  resultCommand: string;
   appliesTo: (diff: Diff) => boolean;
   run: (diff: Diff, context: { workspaceRoot: string }) => Promise<CheckResult>;
 };
@@ -56,6 +57,7 @@ export function createCheck(
     },
     installable: false,
     setupCommand: 'mewra-blackbox.results',
+    resultCommand: 'mewra-blackbox.results',
     // Always contribute a visible row; no-match is explicitly skipped by run().
     appliesTo: () => true,
     async run(diff, context) {
@@ -99,12 +101,15 @@ export async function registerWithHost(
   try {
     const api = (await host.activate()) as {
       apiVersion?: unknown;
+      capabilities?: { resultActions?: boolean };
       registerCheck?: (c: CheckRunner) => { dispose(): void };
     };
     if (api?.apiVersion !== 1 || typeof api.registerCheck !== 'function')
       return { message: 'PreFlight API is incompatible; API v1 is required.' };
     return {
-      message: 'Connected to PreFlight API v1.',
+      message: api.capabilities?.resultActions
+        ? 'Connected to PreFlight API v1 with result actions.'
+        : 'Connected to PreFlight API v1. This host has no row result action; use Blackbox: Open Results.',
       registration: api.registerCheck(check),
     };
   } catch {
