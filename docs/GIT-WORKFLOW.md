@@ -6,14 +6,14 @@
 
 ## Branch names
 
-| Prefix | Example |
-| --- | --- |
-| `docs/` | `docs/initial-threat-model` |
-| `feat/` | `feat/playwright-runner` |
-| `security/` | `security/target-origin-policy` |
-| `test/` | `test/browser-isolation-fixtures` |
-| `fix/` | `fix/artifact-path-validation` |
-| `ci/` | `ci/add-extension-validation` |
+| Prefix      | Example                           |
+| ----------- | --------------------------------- |
+| `docs/`     | `docs/initial-threat-model`       |
+| `feat/`     | `feat/playwright-runner`          |
+| `security/` | `security/target-origin-policy`   |
+| `test/`     | `test/browser-isolation-fixtures` |
+| `fix/`      | `fix/artifact-path-validation`    |
+| `ci/`       | `ci/add-extension-validation`     |
 
 ## Commits
 

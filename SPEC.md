@@ -2,13 +2,13 @@
 
 ## 1. Identity
 
-| Item | Value |
-| --- | --- |
-| Product name | Mewra Blackbox |
-| Repository | `github.com/mewra-lab/mewra-blackbox` |
-| Intended extension identifier | `mewra.mewra-blackbox` |
-| Role | Browser E2E and visual-regression companion for Mewra PreFlight |
-| Initial delivery | Documentation and threat model first; implementation follows approved milestones |
+| Item                          | Value                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------- |
+| Product name                  | Mewra Blackbox                                                                   |
+| Repository                    | `github.com/mewra-lab/mewra-blackbox`                                            |
+| Intended extension identifier | `mewra.mewra-blackbox`                                                           |
+| Role                          | Browser E2E and visual-regression companion for Mewra PreFlight                  |
+| Initial delivery              | Documentation and threat model first; implementation follows approved milestones |
 
 ## 2. Problem
 
@@ -34,12 +34,12 @@ Code-level checks cannot establish whether a real browser can complete a critica
 
 ## 5. Personas and roles
 
-| Role | Authority |
-| --- | --- |
-| Workspace owner | Approves target origins, auth mode, scenarios, evidence policy, and baseline changes. |
-| Developer | Runs approved scenarios locally and investigates results. |
+| Role            | Authority                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Workspace owner | Approves target origins, auth mode, scenarios, evidence policy, and baseline changes.                                      |
+| Developer       | Runs approved scenarios locally and investigates results.                                                                  |
 | AI coding agent | Reads normalized results and may propose scenarios or fixes; cannot approve targets, secrets, baselines, or release gates. |
-| PreFlight | Receives one normalized contributed-check result and applies its normal gate policy. |
+| PreFlight       | Receives one normalized contributed-check result and applies its normal gate policy.                                       |
 
 ## 6. Execution model
 

@@ -1,5 +1,15 @@
 # Security Model
 
+## Implemented controls and privacy limits
+
+Configuration approval is a digest of validated v1 data in workspace-scoped SecretStorage. Changes are rechecked before every run and between viewport runs. A watcher cancels active work on configuration changes. Only one trusted local workspace and one concurrent suite are supported. Agents can never create an approval.
+
+Requests pass through exact-origin browser routing and an IP-pinning proxy. The proxy denies unapproved origins and validates all DNS answers; TLS verification stays enabled. Popups, downloads, service workers, and WebSockets are denied. Private and loopback networks require separate explicit opt-ins; link-local metadata endpoints remain denied.
+
+Native Playwright traces are deliberately not recorded: they can embed sensitive DOM, cookies, and request data that cannot be reliably sanitized after capture. Evidence traces contain only deterministic step index, action name, and status. Raw console text, network bodies, headers, and browser exception messages are omitted. Secret-bearing scenarios suppress screenshots, and all editable fields are masked in other scenarios. Owners must approve only suitable test data and mask sensitive rendered regions; this is not automatic PII detection.
+
+Screenshots and baselines are local, quota-bound and outside Git. The result viewer embeds validated image bytes with a restrictive CSP; it never opens a path/URL from a webview message. Baseline review has a second native VS Code modal and revalidates both approval and candidate identity after confirmation. Baselines are never promoted by a run or an MCP call.
+
 ## Assets to protect
 
 - Developer, test, and production credentials.
@@ -10,13 +20,13 @@
 
 ## Trust boundaries
 
-| Input or boundary | Treatment |
-| --- | --- |
-| Workspace configuration | Owner-controlled but schema-validated before any browser launch. |
-| Agent proposal or MCP request | Untrusted until constrained to an existing approved scenario or a reviewable proposal. |
-| Webview message | Untrusted; validate runtime messages and never turn it into an arbitrary browser action. |
-| Target page | Untrusted remote content. It must not control host commands, configuration, or VS Code APIs. |
-| Browser artifact | Potentially sensitive; keep local, path-validate, redact, and retention-bound. |
+| Input or boundary             | Treatment                                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| Workspace configuration       | Owner-controlled but schema-validated before any browser launch.                             |
+| Agent proposal or MCP request | Untrusted until constrained to an existing approved scenario or a reviewable proposal.       |
+| Webview message               | Untrusted; validate runtime messages and never turn it into an arbitrary browser action.     |
+| Target page                   | Untrusted remote content. It must not control host commands, configuration, or VS Code APIs. |
+| Browser artifact              | Potentially sensitive; keep local, path-validate, redact, and retention-bound.               |
 
 ## Target policy
 
@@ -52,16 +62,16 @@ Every executable scenario must resolve to an origin explicitly allowed by worksp
 
 ## Agent capabilities
 
-| Capability | Agent access |
-| --- | --- |
-| Read redacted result summary | Allowed. |
-| List approved scenarios | Allowed. |
-| Request an existing approved scenario run | Allowed with bounded arguments. |
-| Propose a declarative scenario | Allowed; owner approval required. |
-| Set target origin, headers, credentials, or launch flags | Denied. |
-| Inject page JavaScript or shell commands | Denied. |
-| Read raw artifacts or SecretStorage | Denied. |
-| Approve visual baseline or waive a failing result | Denied. |
+| Capability                                               | Agent access                      |
+| -------------------------------------------------------- | --------------------------------- |
+| Read redacted result summary                             | Allowed.                          |
+| List approved scenarios                                  | Allowed.                          |
+| Request an existing approved scenario run                | Allowed with bounded arguments.   |
+| Propose a declarative scenario                           | Allowed; owner approval required. |
+| Set target origin, headers, credentials, or launch flags | Denied.                           |
+| Inject page JavaScript or shell commands                 | Denied.                           |
+| Read raw artifacts or SecretStorage                      | Denied.                           |
+| Approve visual baseline or waive a failing result        | Denied.                           |
 
 ## Failure behavior
 
