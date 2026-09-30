@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 — Unreleased
+## 0.3.0 — 2026-09-30
 
 - Initial VS Code extension, strict versioned configuration and digest-bound human approval.
 - Isolated Chromium scenarios, exact-origin/DNS-pinned network policy, deterministic actions and assertions, cancellation and timeouts.
