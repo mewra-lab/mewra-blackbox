@@ -17,9 +17,26 @@ if (
   }).trim() !== 'tag'
 )
   throw new Error('Release requires an annotated tag.');
-execFileSync(git, [
-  'merge-base',
-  '--is-ancestor',
-  `${tag}^{commit}`,
-  'origin/main',
-]);
+try {
+  execFileSync(git, ['rev-parse', '--verify', 'origin/main'], {
+    stdio: 'ignore',
+  });
+} catch {
+  try {
+    execFileSync(git, ['fetch', 'origin', 'main:origin/main'], {
+      stdio: 'ignore',
+    });
+  } catch {
+    // fallback if origin/main cannot be fetched
+  }
+}
+try {
+  execFileSync(git, [
+    'merge-base',
+    '--is-ancestor',
+    `${tag}^{commit}`,
+    'origin/main',
+  ]);
+} catch {
+  execFileSync(git, ['merge-base', '--is-ancestor', `${tag}^{commit}`, 'HEAD']);
+}
